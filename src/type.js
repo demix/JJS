@@ -314,6 +314,21 @@
             
 
             return array;
+        },
+
+
+
+
+        /**
+         * user difine property
+         */
+        extend: function(target,source){
+            for( var i in source ){
+                if( source.hasOwnProperty(i) ){
+                    target[i] = source[i];
+                }
+            }
+            return target;
         }
     };
 
@@ -323,13 +338,9 @@
         p_bind: function(func,thisArg){
             var Target = func;
             if( typeof this != 'function' ) throw new TypeError();
-            var A = arguments.length > 1 ? [].slice.call(arguments , 1) : null;
+            var A = arguments.length > 2 ? [].slice.call(arguments , 2) : [];
             var F = function(){
-                if( A && A.length ) {
-                    return Target.apply(thisArg , A.concat([].slice.call(arguments)));
-                }else{
-                    return Target.apply(thisArg , A);
-                }
+                return Target.apply(thisArg , A.concat([].slice.call(arguments)));
             };
 
             return F;

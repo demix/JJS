@@ -14,7 +14,13 @@
 
     global.construct = function(){
         var type = global.type;
-
+        for( var i=0,l=onconstruct.length ; i<l ; i++ ){
+            var func = onconstruct[i];
+            if( typeof func == 'function' ){
+                func();
+            }
+        }
+        
         for( var strObj in type ){
             if( type.hasOwnProperty(strObj) ){
                 var obj = window[upperFirstLetter(strObj)];
@@ -53,7 +59,6 @@
                 }
             }
         }
-        
 
         global.__init__ = true;
 
@@ -61,6 +66,12 @@
 
 
     global.destruct = function(){
+        for( var i=0,l=ondestruct.length ; i<l ; i++ ){
+            var func = ondestruct[i];
+            if( typeof func == 'function' ){
+                func();
+            }
+        }
         for( var strObj in properDic ) {
             if( properDic.hasOwnProperty(strObj)){
                 var obj = window[upperFirstLetter(strObj)];
@@ -82,8 +93,61 @@
                 }
             }
         }
+
         global.__init__ = false;
 
+    };
+
+    var ondestruct = [];
+    global.ondestruct = function(func){
+        ondestruct.push(func);
+    };
+
+    var onconstruct = [];
+    global.onconstruct = function(func){
+        onconstruct.push(func);
+    };
+
+    var onwindowunload = [];
+    global.onunload = function(func){
+        onwindowunload.push(func);
+    };
+
+
+    var Global = [];
+    global.addGlobal = function(items){
+        for( var i in items ){
+            if( items.hasOwnProperty(i) ){
+                Global.push(i);
+                global[i] = items[i];
+            }
+        }
+    };
+
+    global.onconstruct(function(){
+        global.type.array.p_forEach(Global , function(item){
+            window[item] = global[item];
+        });
+    });
+
+    global.ondestruct(function(){
+        global.type.array.p_forEach(Global , function(item){
+            try{
+                delete window[item];
+            }catch(e){//for ie
+                window[item] = null;
+            }
+        });
+    });
+
+    
+    window.onunload  =function(){
+        for( var i=0,l=ondestruct.length ; i<l ; i++ ){
+            var func = ondestruct[i];
+            if( typeof func == 'function' ){
+                func();
+            }
+        }
     };
 
 

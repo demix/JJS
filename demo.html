@@ -3,22 +3,35 @@
     <head>
         <meta charset="utf-8" />
         <title>JJS demo</title>
-        <script type="text/javascript" src="src/jjs.js"></script>
+        <script type="text/javascript" src="src/core.js"></script>
         <script type="text/javascript" src="src/type.js"></script>
         <script type="text/javascript" src="src/transform.js"></script>
+        <script type="text/javascript" src="src/utils.js"></script>
+        <script type="text/javascript" src="src/class.js"></script>
         <script type="text/javascript" src="src/node.js"></script>
-
+        <script type="text/javascript" src="src/fx.js"></script>
+        <style type="text/css" media="screen">
+            .xxx{position:absolute;width:100px;height:100px;background:#000;}
+        </style>
     </head>
     <body>
-         <div id="aaa">
+         <div id="aaa" class="xxx vvv bbb">
              
          </div>
         <script type="text/javascript">
             
             jjs(function(){
-            
 
-            
+            var fx = new Tween('aaa', {
+            transition:'pow'
+            });
+            fx.start('left' ,  600);
+
+            var fx2 = new Tween('aaa' , {
+            transition:'pow'
+            });
+            fx2.start('opacity' , 0 , 1);
+            //jjs('aaa').style.filter = 'alpha(opacity=70)';
             });
 
 
